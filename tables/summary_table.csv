@@ -1,0 +1,14 @@
+coicop_code,coicop_category,monthly_pct,annual_pct,monthly_volatility
+CP10,10 Education,2.3,7.5,0.86
+CP08,08 Communication,0.0,5.8,1.43
+CP04,"04 Housing, water, electricity, gas and other fuels",0.5,5.6,0.83
+CP06,06 Health,0.8,5.0,0.54
+CP02,02 Alcoholic beverages and tobacco,1.8,4.9,0.86
+CP00,Overall Index,0.0,3.9,0.45
+CP09,09 Recreation and culture,0.3,3.8,0.5
+CP11,11 Restaurants and hotels,-1.0,3.4,0.99
+CP01,01 Food and non-alcoholic beverages,0.9,3.3,0.7
+CP12,12 Miscellaneous goods and services,0.2,2.7,0.31
+CP03,03 Clothing and footwear,-3.3,1.8,1.77
+CP07,07 Transport,-0.5,1.7,1.25
+CP05,"05 Furniture, household equipment and maintenance",-2.3,0.5,1.08
