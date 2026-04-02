@@ -97,7 +97,7 @@ summary_table['monthly_volatility'] = summary_table['monthly_volatility'].round(
 summary_table.to_csv("../tables/summary_table.csv", index=False)
 
 #------------------------------------------------------------------------------
-#HEADLINE INDEX GRAPH
+#HEADLINE INDEX CHART
 
 headline_cpih = cpih_data[cpih_data['coicop_code'] == 'CP00'] # isolate the headline figures
 
@@ -116,4 +116,35 @@ plt.tight_layout()
 
 #save
 plt.savefig('../figures/headline_index.png', dpi=200)
+plt.close()
+
+#------------------------------------------------------------------------------
+#MOST VOLATILE ITEM CHART
+
+#identify most volatile category
+most_volatile_row = summary_table.loc[summary_table['monthly_volatility'].idxmax()]
+
+most_volatile_code = most_volatile_row['coicop_code']
+most_volatile_label = most_volatile_row['coicop_category']
+
+#print(most_volatile_code)
+#print(most_volatile_label)
+
+most_volatile_category = cpih_data[cpih_data['coicop_code'] == most_volatile_code]
+
+#plot
+figure, axes = plt.subplots(figsize=(10,5))
+axes.plot(most_volatile_category['month'], most_volatile_category['index_value'], linewidth=2, color='#d4351c')
+
+#title/labels
+plt.title(f'CPIH Most Volatile Item Category: {most_volatile_label}') # f-string allows the title to be dynamic in case the most volatile category changes
+#plt.xlabel('Month')
+#plt.ylabel('Index value')
+
+#layout
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+
+#save
+plt.savefig('../figures/most_volatile_category.png', dpi=200)
 plt.close()
