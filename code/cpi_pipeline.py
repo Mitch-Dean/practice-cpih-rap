@@ -58,11 +58,11 @@ cpih_data['monthly_pct'] = (cpih_data['index_value'] / cpih_data['lag_1'] - 1) *
 cpih_data['annual_pct'] = (cpih_data['index_value'] / cpih_data['lag_12'] -1) * 100
 
 #compute standard deviation
-monthly_volatility = (
+volatility_df = (
     cpih_data
     .groupby(['coicop_code','coicop_category'])['monthly_pct']
     .std()
-    .reset_index(name='monthly_volatility')
+    .reset_index(name='volatility')
     )
 
 #QA check: ensure pct columns have been populated
@@ -83,7 +83,7 @@ summary_table = summary_table.sort_values('annual_pct', ascending=False) #sort c
 
 #merge volatility
 summary_table = summary_table.merge(
-    monthly_volatility,
+    volatility_df,
     on=['coicop_code','coicop_category'],
     how='left'
     )
@@ -91,7 +91,7 @@ summary_table = summary_table.merge(
 #round pcts
 summary_table['monthly_pct'] = summary_table['monthly_pct'].round(1)
 summary_table['annual_pct'] = summary_table['annual_pct'].round(1)
-summary_table['monthly_volatility'] = summary_table['monthly_volatility'].round(2)
+summary_table['volatility'] = summary_table['volatility'].round(2)
 
 #save
 summary_table.to_csv("../tables/summary_table.csv", index=False)
@@ -122,7 +122,7 @@ plt.close()
 #MOST VOLATILE ITEM CHART
 
 #identify most volatile category
-most_volatile_row = summary_table.loc[summary_table['monthly_volatility'].idxmax()]
+most_volatile_row = summary_table.loc[summary_table['volatility'].idxmax()]
 
 most_volatile_code = most_volatile_row['coicop_code']
 most_volatile_label = most_volatile_row['coicop_category']
@@ -147,4 +147,27 @@ plt.tight_layout()
 
 #save
 plt.savefig('../figures/most_volatile_category.png', dpi=200)
+plt.close()
+
+#------------------------------------------------------------------------------
+#ALL-CATEGORY VOLATILITY BAR CHART
+
+volatility_df = volatility_df.sort_values('volatility', ascending=False)
+
+#plot
+figure, axes = plt.subplots(figsize=(10,5))
+axes.barh(volatility_df['coicop_category'], volatility_df['volatility'], color='#005ea5')
+
+#title/labels
+plt.title('Price Volatility of CPIH Categories (2020-2025)')
+plt.xlabel('Volatility (standard deviation of monthly % change)')
+#plt.ylabel('COICOP category')
+
+#layout
+plt.gca().invert_yaxis() #Get Current Axes ('gca') and flip the visual order so the most volatile categoires appear at the top (without affecting the actual ordering)
+plt.grid(True, axis='x', alpha=0.3)
+plt.tight_layout()
+
+#save
+plt.savefig('../figures/volatility_barchart.png', dpi=200)
 plt.close()
